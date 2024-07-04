@@ -1,4 +1,4 @@
-## Api 
+## API 
 The API through which I got the news response https://newsapi.org/ 
 fetch the data using axios.
 ## Technology
