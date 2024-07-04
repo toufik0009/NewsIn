@@ -1,3 +1,5 @@
+# Api 
+The API I used to get news response https://newsapi.org/
 ## Technology
 ![RN](https://github.com/toufik0009/NewsIn/assets/128703689/5a6c81c9-1dcc-4a0d-b9e8-2fd11eed9bfd)
 ![TWC](https://github.com/toufik0009/NewsIn/assets/128703689/347f654c-0b6a-42cf-8620-ea5099e31332)
