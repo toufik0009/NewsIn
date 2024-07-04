@@ -1,5 +1,6 @@
 ## Api 
-The API through which I got the news response https://newsapi.org/
+The API through which I got the news response https://newsapi.org/ 
+fetch the data using axios.
 ## Technology
 ![RN](https://github.com/toufik0009/NewsIn/assets/128703689/5a6c81c9-1dcc-4a0d-b9e8-2fd11eed9bfd)
 ![TWC](https://github.com/toufik0009/NewsIn/assets/128703689/347f654c-0b6a-42cf-8620-ea5099e31332)
