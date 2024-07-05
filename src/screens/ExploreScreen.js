@@ -19,17 +19,17 @@ const ExploreScreen = () => {
   useEffect(() => {
     if (apiRes.length > 0) {
       setTrending(apiRes[0].articles.slice(0, 5));
-      setCategories(['Politics', 'Sports', 'Entertainment', 'Technology', 'Health']); // Example categories
+      setCategories(['Politics', 'Sports', 'Entertainment', 'Technology', 'Health']);
     }
   }, [apiRes]);
 
   // Category Screen
-  const handleCategoryPress = (category) => {
-    navigation.navigate('CategoryScreen', { category });
+  const handleCategoryPress = (category,searchTxt) => {
+    navigation.navigate('CategoryScreen', { category,searchTxt });
   };
 
   const renderTrendingItem = ({ item }) => {
-    if (!searchTxt || item?.author.toLowerCase().includes(searchTxt.toLowerCase())) {
+    if (!searchTxt || item?.title.toLowerCase().includes(searchTxt.toLowerCase())) {
       return (
         <TouchableOpacity
           style={{ marginBottom: 10, paddingHorizontal: 12 }}

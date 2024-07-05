@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, RefreshControl, ActivityIndicator, FlatList } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, RefreshControl, ActivityIndicator, FlatList, useColorScheme } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MyContext } from '../contextApi/ContextApi';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,6 +8,7 @@ import Search from '../components/Search';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const colorScheme =useColorScheme()=='dark'
   const { apiRes, GetResponse, searchTxt } = useContext(MyContext);
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(1);
@@ -29,7 +30,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     if (apiRes.length > 0) {
-      setData(apiRes[0].articles.slice(0, page * 10));
+      setData(apiRes[0].articles.slice(0, page * 5));
     }
   }, [apiRes, page]);
 
@@ -41,26 +42,25 @@ const HomeScreen = () => {
     }
   };
 
-  const renderItem = ({ item }) => {
-    if (!searchTxt || item?.source?.name.toLowerCase().includes(searchTxt.toLowerCase())) {
+  const renderItem = ({ item }, searchTxt, FullScreen) => {
+    if (!searchTxt || item?.description.toLowerCase().includes(searchTxt.toLowerCase())) {
       return (
-      
-          <TouchableOpacity
-            style={{ marginBottom: 10, paddingHorizontal: 12 }}
-            onPress={() => { FullScreen(item) }}>
-            <View className='flex-1 flex-row overflow-hidden rounded-xl dark:bg-slate-400'>
-              <Image
-                source={{ uri: item?.urlToImage || 'https://www.createagile.com/blog/wp-content/uploads/2020/11/what-is-alt-text.png' }}
-                style={{ height: 'auto', width: 150, borderRadius: 10 }}
-                alt='image'
-              />
-              <View className="flex-1 pl-2 gap-3 py-5">
-              <Text className="text-lg font-semibold text-gray-600 " numberOfLines={2}>{item?.author}</Text>
-              <Text className="text-sm font-bold" numberOfLines={2}>{item?.title}</Text>
+        <TouchableOpacity
+          style={{ marginBottom: 10, paddingHorizontal: 12 }}
+          onPress={() => { FullScreen(item) }}
+        >
+          <View style={{ flex: 1, flexDirection: 'row', overflow: 'hidden', borderRadius: 10, backgroundColor: colorScheme?'rgb(148 163 184)':'white'  }}>
+            <Image
+              source={{ uri: item?.urlToImage || 'https://www.createagile.com/blog/wp-content/uploads/2020/11/what-is-alt-text.png' }}
+              style={{ height: 'auto', width: 150, borderRadius: 10 }}
+              alt='image'
+            />
+            <View style={{ flex: 1, paddingLeft: 8,paddingVertical:15, justifyContent: 'center',gap:20}}>
+              <Text style={{ fontSize: 18, fontWeight: 'bold', color: colorScheme?'#ffff':'gray' }} numberOfLines={2}>{item?.author}</Text>
+              <Text style={{ fontSize: 16, fontWeight: 'semibold' }} numberOfLines={2}>{item?.title}</Text>
             </View>
-
-            </View>
-          </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
       );
     }
     return null;
@@ -129,8 +129,8 @@ const HomeScreen = () => {
             ))
           ) : (
             <View className='flex-row items-center space-x-1'>
-            <ActivityIndicator style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} size='large' color='#05a81b' />
-            <Text className='text-lg dark:text-white'>Loading...</Text>
+              <ActivityIndicator style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} size='large' color='#05a81b' />
+              <Text className='text-lg dark:text-white'>Loading...</Text>
             </View>
           )}
         </ScrollView>
@@ -141,16 +141,17 @@ const HomeScreen = () => {
       </View>
 
       <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => index.toString()}
-          onEndReached={loadMoreData}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={loadingMore && <ActivityIndicator style={{ marginVertical: 10 }} size='small' color='#0000ff' />}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#ff0000', '#199afc', '#04c233']} />
-          }
-        />
+      data={data}
+      renderItem={(props) => renderItem(props, searchTxt, FullScreen)}
+      keyExtractor={(item, index) => index.toString()}
+      onEndReached={loadMoreData}
+      onEndReachedThreshold={0.5}
+      ListFooterComponent={loadingMore && <ActivityIndicator style={{ marginVertical: 10 }} size='large' color='#00ff00' />}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} colors={['#ff0000', '#199afc', '#04c233']} />
+      }
+    />
+
 
 
     </SafeAreaView>

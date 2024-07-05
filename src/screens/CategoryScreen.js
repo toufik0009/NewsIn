@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, Linking } from 'react-native';
+import { MyContext } from '../contextApi/ContextApi';
 
 const CategoryScreen = ({ route }) => {
+  const {formattedDate} =useContext(MyContext)
   const { category } = route.params;
+  
   const [categoryData, setCategoryData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchCategoryData(category);
+    
   }, [category]);
 
   const fetchCategoryData = async (category) => {
@@ -15,9 +19,9 @@ const CategoryScreen = ({ route }) => {
       setLoading(true);
       // const apiUrl = `https://newsapi.org/v2/everything?q=${category}&from=2024-06-03&sortBy=publishedAt&apiKey=c4693ee77bef40bbbc6cc31749efff3a`;
       
-      const apiUrl = `https://newsapi.org/v2/everything?q=${category}&from=2024-06-03&sortBy=publishedAt&apiKey=12745954295d4a71b2c4f219069c22c9`;
+      const apiUrl = `https://newsapi.org/v2/everything?q=${category}&from=${formattedDate}&sortBy=publishedAt&apiKey=12745954295d4a71b2c4f219069c22c9`;
       const response = await fetch(apiUrl);
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
